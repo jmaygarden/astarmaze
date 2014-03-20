@@ -136,31 +136,6 @@ Map.prototype.make_maze = function() {
     x = Math.floor(this.fieldWidth * Math.random());
     y = Math.floor(this.fieldHeight * Math.random());
     this.carve(x, y);
-
-    if (0 < this.frontier.length) {
-        while (0 < this.frontier.length) {
-            this.step();
-        }
-
-        for (var x = 0; x < this.fieldWidth; x += 1) {
-            for (var y = 0; y < this.fieldHeight; y += 1) {
-                if ('?' == this.field[x][y]) {
-                    var dx = Math.floor(4 * Math.random()) + 1;
-                    var dy = Math.floor(4 * Math.random()) + 1;
-                    for (var i = x-dx; i < x+dx; ++i) {
-                        for (var j = y-dy; j < y+dy; ++j) {
-                            var check =
-                                i >= 0 && i < this.fieldWidth &&
-                                j >= 0 && j < this.fieldHeight;
-                            if (check) {
-                                this.field[i][j] = '.';
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 Map.prototype.check = function(x, y) {
@@ -266,6 +241,29 @@ Map.prototype.render = function() {
 }
 
 Map.prototype.update = function(t, dt) {
+    if (0 < this.frontier.length) {
+        this.step();
+    } else {
+        for (var x = 0; x < this.fieldWidth; x += 1) {
+            for (var y = 0; y < this.fieldHeight; y += 1) {
+                if ('?' == this.field[x][y]) {
+                    var dx = Math.floor(4 * Math.random()) + 1;
+                    var dy = Math.floor(4 * Math.random()) + 1;
+                    for (var i = x-dx; i < x+dx; ++i) {
+                        for (var j = y-dy; j < y+dy; ++j) {
+                            var check =
+                                i >= 0 && i < this.fieldWidth &&
+                                j >= 0 && j < this.fieldHeight;
+                            if (check) {
+                                this.field[i][j] = '.';
+                            }
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+    }
 }
 
 {
